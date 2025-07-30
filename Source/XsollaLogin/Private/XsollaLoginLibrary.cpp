@@ -12,10 +12,10 @@
 #include "Misc/CommandLine.h"
 #include "Online.h"
 #include "OnlineSubsystem.h"
+#include "Runtime/Launch/Resources/Version.h"
+#include "TextureResource.h"
 #include "XsollaSettings/Public/XsollaProjectSettings.h"
 #include "XsollaSettings/Public/XsollaSettingsModule.h"
-#include "TextureResource.h"
-#include "Runtime/Launch/Resources/Version.h"
 
 UXsollaLoginLibrary::UXsollaLoginLibrary(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -39,7 +39,7 @@ FString UXsollaLoginLibrary::GetStringCommandLineParam(const FString& ParamName)
 FString UXsollaLoginLibrary::GetSessionTicket()
 {
 	IOnlineSubsystem* OnlineInterface = IOnlineSubsystem::Get();
-	FString SessionTicket = OnlineInterface->GetIdentityInterface()->GetAuthToken(0);
+	FString SessionTicket = OnlineInterface->GetByPlatform()->GetIdentityInterface()->GetAuthToken(0);
 	return SessionTicket;
 }
 
