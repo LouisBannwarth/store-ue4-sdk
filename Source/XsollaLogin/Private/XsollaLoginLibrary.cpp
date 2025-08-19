@@ -134,12 +134,12 @@ bool UXsollaLoginLibrary::IsSteamBuildValid(FString& OutError)
 		isValid = false;
 		OutError = TEXT("Check the Build For Steam box in the settings");
 	}
-	else if (!FModuleManager::Get().IsModuleLoaded("OnlineSubsystemSteam") || !FModuleManager::Get().IsModuleLoaded("SteamCorePro"))
+	else if (!FModuleManager::Get().IsModuleLoaded("OnlineSubsystemSteam") && !FModuleManager::Get().IsModuleLoaded("SteamCorePro"))
 	{
 		isValid = false;
 		OutError = TEXT("Enable the OnlineSubsystemSteam or SteamCorePro plug-in");
 	}
-	else if (!IOnlineSubsystem::IsEnabled(STEAM_SUBSYSTEM) || !IOnlineSubsystem::IsEnabled("SteamCore"))
+	else if (!IOnlineSubsystem::IsEnabled(STEAM_SUBSYSTEM) && !IOnlineSubsystem::IsEnabled("SteamCore"))
 	{
 		isValid = false;
 		OutError = TEXT("Add Steam data to the Config/DefaultEngine.ini file");
