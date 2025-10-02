@@ -12,10 +12,10 @@
 #include "Misc/CommandLine.h"
 #include "Online.h"
 #include "OnlineSubsystem.h"
+#include "Runtime/Launch/Resources/Version.h"
+#include "TextureResource.h"
 #include "XsollaSettings/Public/XsollaProjectSettings.h"
 #include "XsollaSettings/Public/XsollaSettingsModule.h"
-#include "TextureResource.h"
-#include "Runtime/Launch/Resources/Version.h"
 
 UXsollaLoginLibrary::UXsollaLoginLibrary(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -39,7 +39,7 @@ FString UXsollaLoginLibrary::GetStringCommandLineParam(const FString& ParamName)
 FString UXsollaLoginLibrary::GetSessionTicket()
 {
 	IOnlineSubsystem* OnlineInterface = IOnlineSubsystem::Get();
-	FString SessionTicket = OnlineInterface->GetIdentityInterface()->GetAuthToken(0);
+	FString SessionTicket = OnlineInterface->GetByPlatform()->GetIdentityInterface()->GetAuthToken(0);
 	return SessionTicket;
 }
 
@@ -134,12 +134,12 @@ bool UXsollaLoginLibrary::IsSteamBuildValid(FString& OutError)
 		isValid = false;
 		OutError = TEXT("Check the Build For Steam box in the settings");
 	}
-	else if (!FModuleManager::Get().IsModuleLoaded("OnlineSubsystemSteam"))
+	else if (!FModuleManager::Get().IsModuleLoaded("OnlineSubsystemSteam") && !FModuleManager::Get().IsModuleLoaded("SteamCorePro"))
 	{
 		isValid = false;
-		OutError = TEXT("Enable the OnlineSubsystemSteam plug-in");
+		OutError = TEXT("Enable the OnlineSubsystemSteam or SteamCorePro plug-in");
 	}
-	else if (!IOnlineSubsystem::IsEnabled(STEAM_SUBSYSTEM))
+	else if (!IOnlineSubsystem::IsEnabled(STEAM_SUBSYSTEM) && !IOnlineSubsystem::IsEnabled("SteamCore"))
 	{
 		isValid = false;
 		OutError = TEXT("Add Steam data to the Config/DefaultEngine.ini file");
